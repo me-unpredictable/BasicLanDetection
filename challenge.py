@@ -18,11 +18,11 @@ kernel_size=5
 low_threshold=50
 high_threshold=150
 # Hough transform parameters
-rho_ = 2
+rho_ = 1
 theta_ = (np.pi/180)
-threshold_ = 15
-min_line_length =40
-max_line_gap =20
+threshold_ = 1
+min_line_length =50
+max_line_gap =50
 
 
 
