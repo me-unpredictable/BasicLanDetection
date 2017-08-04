@@ -22,11 +22,11 @@ for i in range(0,2):
     low_threshold=50
     high_threshold=150
     # Hough transform parameters
-    rho_ = 2
+    rho_ = 1
     theta_ = (np.pi/180)
-    threshold_ = 15
-    min_line_length =40
-    max_line_gap =20
+    threshold_ = 1
+    min_line_length =70
+    max_line_gap =50
 
 
 
@@ -36,7 +36,7 @@ for i in range(0,2):
     vid_img=np.copy(pic)
     y_size=vid_img.shape[0]
     x_size=vid_img.shape[1]
-    apex=[490,300]
+    apex=[490,308]
     image_bottomleft=[0,y_size]
     image_bottomright=[x_size,y_size]
     rm=np.array([apex,image_bottomleft,image_bottomright],np.int32)
