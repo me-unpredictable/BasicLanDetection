@@ -19,11 +19,11 @@ kernel_size=5
 low_threshold=50
 high_threshold=150
 # Hough transform parameters
-rho_ = 1
+rho_ = 8
 theta_ = (np.pi/180)
-threshold_ = 1
-min_line_length =10
-max_line_gap =50
+threshold_ = 90
+min_line_length =1
+max_line_gap =250
 
 pic_set=['test_images/solidWhiteCurve.jpg','test_images/solidWhiteRight.jpg','test_images/solidYellowCurve.jpg',
          'test_images/solidYellowCurve2.jpg','test_images/solidYellowLeft.jpg','test_images/whiteCarLaneSwitch.jpg']
@@ -37,7 +37,7 @@ for i in range(0,6):
     vid_img=np.copy(pic)
     y_size=vid_img.shape[0]
     x_size=vid_img.shape[1]
-    apex=[490,330]
+    apex=[490,315]
     image_bottomleft=[0,y_size]
     image_bottomright=[x_size,y_size]
     rm=np.array([apex,image_bottomleft,image_bottomright],np.int32)
@@ -65,7 +65,7 @@ for i in range(0,6):
         # Iterate over the output "lines" and draw lines on the blank
         for line in lines:
             for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 3)
     except:
         pass
 
@@ -95,7 +95,7 @@ for i in range(0,6):
 
         for line in hsv_lines:
             for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 3)
     except:
         pass
 
