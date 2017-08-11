@@ -1,9 +1,12 @@
 import numpy as np
 import cv2
+
 #vid =cv2.VideoCapture('test_videos/challenge.mp4')
 #vid =cv2.VideoCapture('test_videos/solidWhiteRight.mp4')
 vid =cv2.VideoCapture('test_videos/challenge.mp4')#load video
-
+fps = vid.get(cv2.cv.CV_CAP_PROP_FPS)
+size = (int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)), int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)))
+video=cv2.VideoWriter('output_videos/challenge.avi',cv2.cv.CV_FOURCC('F','L','V','1'),fps,size)
 cv2.namedWindow('Road View')
 #RGB Threshold Parameters
 red_val=0
@@ -20,13 +23,14 @@ high_threshold=150
 # Hough transform parameters
 rho_ = 1
 theta_ = (np.pi/180)
-threshold_ = 1
+threshold_ = 1#15
 min_line_length =50
-max_line_gap =50
+max_line_gap =50#20
 
 
 
 bool,pic = vid.read()#read a frame from video
+#print bool
 line_image= np.copy(pic)*0 #creating a blank to draw lines on
 
 #image assets
@@ -96,6 +100,7 @@ combo=cv2.addWeighted(vid_img,0.8,line_image,1,0)#draw detection lines on origna
 
 while bool and cv2.waitKey(1)==-1:
     cv2.imshow('Road View', combo)
+    video.write(combo)
     bool,pic=vid.read() #reading a frame
     if not bool:
         break
