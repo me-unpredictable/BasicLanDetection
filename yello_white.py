@@ -1,32 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-#vid =cv2.VideoCapture('test_videos/challenge.mp4')
-#vid =cv2.VideoCapture('test_videos/solidWhiteRight.mp4')
 
 vid_set=['test_videos/solidWhiteRight.mp4','test_videos/solidYellowLeft.mp4']
 
 for i in range(0,2):
     vid =cv2.VideoCapture(vid_set[i])#load video
+    fps = vid.get(cv2.cv.CV_CAP_PROP_FPS)
+    size = (int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)), int(vid.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)))
     cv2.namedWindow('Road View')
+    name='output_videos/video'+str(i)+'.avi'
+    video=cv2.VideoWriter(name,cv2.cv.CV_FOURCC('F','L','V','1'),fps,size)
     #RGB Threshold Parameters
-    red_val=0
-    green_val=200
-    blue_val=200
+    red_val=190
+    green_val=190
+    blue_val=190
+
     #HSV Threshold Parameters
-    Hue=41
-    Sat=96
-    Val=41
+    Hue=60#41
+    Sat=86#96
+    Val=90#41
     #Gaussian Blur Parameters
     kernel_size=5
     low_threshold=50
     high_threshold=150
     # Hough transform parameters
-    rho_ = 1
+    rho_ = 8#1
     theta_ = (np.pi/180)
-    threshold_ = 1
-    min_line_length =70
-    max_line_gap =50
+    threshold_ = 100#15
+    min_line_length =1
+    max_line_gap =190#20
 
 
 
@@ -36,7 +39,7 @@ for i in range(0,2):
     vid_img=np.copy(pic)
     y_size=vid_img.shape[0]
     x_size=vid_img.shape[1]
-    apex=[490,308]
+    apex=[485,315]
     image_bottomleft=[0,y_size]
     image_bottomright=[x_size,y_size]
     rm=np.array([apex,image_bottomleft,image_bottomright],np.int32)
@@ -64,7 +67,7 @@ for i in range(0,2):
         # Iterate over the output "lines" and draw lines on the blank
         for line in lines:
             for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
     except:
         pass
 
@@ -87,18 +90,19 @@ for i in range(0,2):
         # Iterate over the output "lines" and draw lines on the blank
         for line in hsv_lines:
             for x1, y1, x2, y2 in line:
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
     except:
         pass
 
     # Draw the lines on the edge image
-    combo=cv2.addWeighted(vid_img,0.8,line_image,1,0)#draw detection lines on orignal image
+    combo=cv2.addWeighted(vid_img,0.7,line_image,1,0)#draw detection lines on orignal image
     #########################################################################
     ######################### Video View#####################################
     #########################################################################
 
     while bool==True and cv2.waitKey(1)==-1:
         cv2.imshow('Road View', combo)
+        video.write(combo)
         bool,pic=vid.read() #reading a frame
         if not bool:
             break
@@ -118,7 +122,7 @@ for i in range(0,2):
             # Iterate over the output "lines" and draw lines on the blank
             for line in lines:
                 for x1, y1, x2, y2 in line:
-                    cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                    cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
         except:
             pass
 
@@ -139,7 +143,7 @@ for i in range(0,2):
             # Iterate over the output "lines" and draw lines on the blank
             for line in hsv_lines:
                 for x1, y1, x2, y2 in line:
-                    cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)
+                    cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 5)
         except:
             pass
         # Create a "color" binary image to combine with line image
@@ -148,7 +152,7 @@ for i in range(0,2):
         # Draw the lines on the edge image
         #hsv_combo = cv2.addWeighted(hsv_color_edges, 0.8, hsv_line_image, 1, 0)
 
-        combo=cv2.addWeighted(vid_img,0.8,line_image,1,0)#draw detection lines on orignal image
+        combo=cv2.addWeighted(vid_img,0.7,line_image,1,0)#draw detection lines on orignal image
 
 
     cv2.destroyWindow('Road View')
